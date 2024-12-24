@@ -23,7 +23,6 @@ async fn main() {
     let app = Router::new()
         .route("/", get(handler))
         .route("/users", get(users_handler))
-        .route("/hello", get(hello))
         .nest_service("/assets", tower_http::services::ServeDir::new("assets"));
 
     // run it
@@ -37,23 +36,16 @@ async fn main() {
 
 async fn users_handler() -> Html<String> {
     let users = get_users();
-    let mut html: String = String::from("<table><tr><th>ID</th><th>Name</th></tr>");
-    for user in users {
-        html.push_str(format!("<tr><td>{}</td><td>{}</td></tr>", user.id, user.name).as_str());
-    }
-    Html(html)
+    let result = UsersTemplate { users: &users };
+    Html(result.render().unwrap())
 }
 
 async fn handler() -> Html<String> {
     Html("<h1>Hello, World!</h1>".to_string())
 }
 
-async fn hello() -> HelloTemplate<'static> {
-    HelloTemplate { name: "Tema" }
-}
-
 #[derive(Template)]
-#[template(path = "index.html")]
-struct HelloTemplate<'a> {
-    name: &'a str,
+#[template(path = "users.html")]
+struct UsersTemplate<'a> {
+    users: &'a [User],
 }
