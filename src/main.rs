@@ -1,9 +1,15 @@
 use askama_axum::Template;
 use axum::{response::Html, routing::get, Router};
 
+struct Item {
+    id: u32,
+    name: String,
+}
+
 struct User {
     id: u32,
     name: String,
+    items: Vec<Item>,
 }
 
 fn get_users() -> Vec<User> {
@@ -12,6 +18,16 @@ fn get_users() -> Vec<User> {
         users.push(User {
             id: i,
             name: format!("Name {i}").to_owned(),
+            items: vec![
+                Item {
+                    id: i + 10,
+                    name: format!("Item name {}", i + 15).to_owned(),
+                },
+                Item {
+                    id: i + 20,
+                    name: format!("Item name {}", i + 25).to_owned(),
+                },
+            ],
         })
     }
     users

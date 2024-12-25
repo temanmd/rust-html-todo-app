@@ -1,10 +1,11 @@
 {% extends "index.html" %} {% block content %}
 <h1>Users</h1>
-<table>
+<table class="striped">
     <thead>
         <tr>
             <th scope="col">ID</th>
             <th scope="col">Name</th>
+            <th scope="col">Items</th>
         </tr>
     </thead>
     <tbody>
@@ -12,6 +13,11 @@
         <tr>
             <td>{{ user.id }}</td>
             <td>{{ user.name }}</td>
+            <td>
+                {% for item in user.items %}
+                <p>{{ item.id }}: {{ item.name }}</p>
+                {% endfor %}
+            </td>
         </tr>
         {% endfor %}
     </tbody>
